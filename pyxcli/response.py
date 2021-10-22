@@ -64,7 +64,7 @@ class XCLIResponse(object):
     @property
     def contained_element_types(self):
         return set(subelement.tag for subelement in
-                   self.as_return_etree.getchildren())
+                   iter(self.as_return_etree))
 
     # @ReservedAssignment
     def all(self, element_type=None, response_path=None):
@@ -80,7 +80,7 @@ class XCLIResponse(object):
         response_element = self.response_etree.find(path)
         if response_element is None:
             return
-        for subelement in self.response_etree.find(path).getchildren():
+        for subelement in iter(self.response_etree.find(path)):
             if element_type is None or subelement.tag == element_type:
                 yield _populate_bunch_with_element(subelement)
 
@@ -94,9 +94,8 @@ class XCLIResponse(object):
         """
         if self.as_return_etree is None:
             return None
-        if len(self.as_return_etree.getchildren()) == 1:
-            return _populate_bunch_with_element(self.as_return_etree.
-                                                getchildren()[0])
+        if len(list(self.as_return_etree)) == 1:
+            return _populate_bunch_with_element(list(self.as_return_etree)[0])
         return _populate_bunch_with_element(self.as_return_etree)
 
     @property
@@ -145,7 +144,7 @@ def _populate_bunch_with_element(element):
 
     if element.get('id'):
         current_bunch['nextra_element_id'] = element.get('id')
-    for subelement in element.getchildren():
+    for subelement in iter(element):
         current_bunch[subelement.tag] = _populate_bunch_with_element(
             subelement)
     return current_bunch
