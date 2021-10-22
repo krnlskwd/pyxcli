@@ -21,7 +21,7 @@ try:
 except ImportError:
     from distutils.core import setup, find_packages
 
-install_requires = ['bunch']
+install_requires = ['munch']
 
 setup(
     name='pyxcli',
