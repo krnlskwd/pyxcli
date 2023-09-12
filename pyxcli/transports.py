@@ -168,21 +168,7 @@ class SocketTransport(object):
         '''
         returns true if connection should verify certificate
         '''
-        if not ca_certs:
-            return False
-
-        xlog.debug("CONNECT SSL %s:%s, cert_file=%s",
-                   hostname, port, ca_certs)
-        certificate = ssl.get_server_certificate((hostname, port),
-                                                 ca_certs=None)
-        # handle XIV pre-defined certifications
-        # if a validation function was given - we let the user check
-        # the certificate himself, with the user's own validate function.
-        # if the validate returned True - the user checked the cert
-        # and we don't need check it, so we return false.
-        if validate:
-            return not validate(certificate)
-        return True
+        return False
 
     @classmethod
     def connect_ssl(cls, hostname, port=XCLI_DEFAULT_PORT, timeout=5.0,
